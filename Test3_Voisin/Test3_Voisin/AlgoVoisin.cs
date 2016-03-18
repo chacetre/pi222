@@ -41,7 +41,7 @@ namespace Test3_Voisin
 
 
             file.Close();
-            
+
             System.Console.WriteLine("Fichier lu");
 
             System.Console.ReadLine();
@@ -53,9 +53,9 @@ namespace Test3_Voisin
             //int minpt = 0;
             //int minobj = 0; 
             Double select = 0.5;
-            
+
             Random r = new Random();
-            int rPoint = r.Next(1, 100);
+            int rPoint = r.Next(1, 100); // nb entre 1 et 99
             Point pInit = groupe[rPoint];
             voisin.Add(pInit);
             int counter = 0;
@@ -77,6 +77,25 @@ namespace Test3_Voisin
             }
             System.Console.WriteLine("il y a {0} points", counter);
 
+        }
+
+        public void RechercherVoisin(Point pInit, List<Point> listPoint, int select)
+        {
+            foreach (Point p in groupe)
+            {
+                Double a = (pInit.X - p.X);
+                Double b = (pInit.Y - p.Y);
+                Double c = (pInit.Z - p.Z);
+                Double dist = Math.Sqrt(a * a + b * b + c * c);
+
+                if (dist <= select)
+                {
+                    voisin.Add(p);
+                    Console.WriteLine(p.ToString());
+                  //  counter++;
+                    //groupe.Remove(p);
+                }
+            }
         }
 
         public void EcrireFichier()
