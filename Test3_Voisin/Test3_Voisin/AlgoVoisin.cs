@@ -18,6 +18,7 @@ namespace Test3_Voisin
             int i = 0;
             // est ce ue ça fonctionne la maintenant 
             //faire en sorte que ca marche par tout 
+            // commentaire
             System.IO.StreamReader file = new System.IO.StreamReader(@"C:\Users\Marjorie\Desktop\PI²\object simple ex\C_002.txt");
             while ((line = file.ReadLine()) != null)
             {
