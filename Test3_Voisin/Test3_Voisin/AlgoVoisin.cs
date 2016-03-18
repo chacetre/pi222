@@ -17,6 +17,7 @@ namespace Test3_Voisin
             string line;
             int i = 0;
 
+            //faire en sorte que ca marche par tout 
             System.IO.StreamReader file = new System.IO.StreamReader(@"C:\Users\Marjorie\Desktop\PI²\object simple ex\C_002.txt");
             while ((line = file.ReadLine()) != null)
             {
@@ -40,9 +41,7 @@ namespace Test3_Voisin
 
 
             file.Close();
-
-
-
+            
             System.Console.WriteLine("Fichier lu");
 
             System.Console.ReadLine();
@@ -54,15 +53,18 @@ namespace Test3_Voisin
             //int minpt = 0;
             //int minobj = 0; 
             Double select = 0.5;
-            Point pinit = groupe[0];
-            voisin.Add(pinit);
+            
+            Random r = new Random();
+            int rPoint = r.Next(1, 100);
+            Point pInit = groupe[rPoint];
+            voisin.Add(pInit);
             int counter = 0;
 
             foreach (Point p in groupe)
             {
-                Double a = (pinit.X - p.X);
-                Double b = (pinit.Y - p.Y);
-                Double c = (pinit.Z - p.Z);
+                Double a = (pInit.X - p.X);
+                Double b = (pInit.Y - p.Y);
+                Double c = (pInit.Z - p.Z);
                 Double dist = Math.Sqrt(a * a + b * b + c * c);
 
                 if (dist <= select)

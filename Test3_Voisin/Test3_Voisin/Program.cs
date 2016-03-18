@@ -14,7 +14,7 @@ namespace Test3_Voisin
             Algo.LireFichier();
             Algo.Trie_voisin();
             Algo.EcrireFichier();
-            // test
+
             Console.ReadKey();
         }
     }
