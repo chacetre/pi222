@@ -18,7 +18,6 @@ namespace Test3_Voisin
             int i = 0;
             // test
             //faire en sorte que ca marche par tout 
-            // blavla
             System.IO.StreamReader file = new System.IO.StreamReader(@"C:\Users\Marjorie\Desktop\PI²\object simple ex\C_002.txt");
             while ((line = file.ReadLine()) != null)
             {
@@ -49,54 +48,50 @@ namespace Test3_Voisin
 
         }
 
+
         public void Trie_voisin()
         {
-            //int minpt = 0;
-            //int minobj = 0; 
-            Double select = 0.5;
-
             Random r = new Random();
             int rPoint = r.Next(1, 100); // nb entre 1 et 99
+
             Point pInit = groupe[rPoint];
-            voisin.Add(pInit);
-            int counter = 0;
 
-            foreach (Point p in groupe)
-            {
-                Double a = (pInit.X - p.X);
-                Double b = (pInit.Y - p.Y);
-                Double c = (pInit.Z - p.Z);
-                Double dist = Math.Sqrt(a * a + b * b + c * c);
+            RechercherVoisin(pInit, groupe);
 
-                if (dist <= select)
-                {
-                    voisin.Add(p);
-                    Console.WriteLine(p.ToString());
-                    counter++;
-                    //groupe.Remove(p);
-                }
-            }
-            System.Console.WriteLine("il y a {0} points", counter);
+            // faire ca tant qu'il y a des point dans groupe 
+            // il faut don c faire un remove
 
         }
 
-        public void RechercherVoisin(Point pInit, List<Point> listPoint, int select)
+        public void RechercherVoisin(Point pInit, List<Point> listPoint)
         {
-            foreach (Point p in groupe)
-            {
-                Double a = (pInit.X - p.X);
-                Double b = (pInit.Y - p.Y);
-                Double c = (pInit.Z - p.Z);
-                Double dist = Math.Sqrt(a * a + b * b + c * c);
+            double pas = 0.5;
 
-                if (dist <= select)
+            foreach (Point p in listPoint)
+            {
+                double distance = DistanceE(p, pInit);
+                if (distance < pas)
                 {
                     voisin.Add(p);
-                    Console.WriteLine(p.ToString());
-                  //  counter++;
-                    //groupe.Remove(p);
+                    Console.WriteLine("ajouter !");
+                    // si besoin faire recherche de voisin encore une fois 
+                    // mettre un breal ou un truc comme ca avce un count en parametre
                 }
             }
+
+        }
+
+        public double DistanceE(Point p1, Point p2)
+        {
+            double distance = 0.0;
+
+            for (int i = 0; i < 3; i++)
+            {
+                distance += Math.Pow((p1.Coordonees[i] - p2.Coordonees[i]), 2.0);
+            }
+
+            distance = Math.Sqrt(distance);
+            return distance;
         }
 
         public void EcrireFichier()

@@ -8,59 +8,29 @@ namespace Test3_Voisin
 {
     class Point
     {
-        private Double x;
-        private Double y;
-        private Double z;
+        List<double> coordonees;
         private int r;
         private int g;
         private int b;
 
-        public Point(Double x, Double y, Double z)
+        public Point(List<double> coordonees)
         {
-            this.X = x;
-            this.Y = y;
-            this.Z = z;
-            this.R = 1;
-            this.G = 1;
-            this.B = 1;
+            this.coordonees = coordonees;
+            this.r = 1;
+            this.g = 1;
+            this.b = 1;
         }
 
-        public double X
+        public List<double> Coordonees
         {
             get
             {
-                return x;
+                return coordonees;
             }
 
             set
             {
-                x = value;
-            }
-        }
-
-        public double Y
-        {
-            get
-            {
-                return y;
-            }
-
-            set
-            {
-                y = value;
-            }
-        }
-
-        public double Z
-        {
-            get
-            {
-                return z;
-            }
-
-            set
-            {
-                z = value;
+                coordonees = value;
             }
         }
 
@@ -105,7 +75,7 @@ namespace Test3_Voisin
 
         public override string ToString()
         {
-            return (Convert.ToString(x) + " " + Convert.ToString(y) + " " + Convert.ToString(z) + " " + Convert.ToString(r) + " " + Convert.ToString(g) + " " + Convert.ToString(b));
+            return (Convert.ToString(Coordonees[0]) + " " + Convert.ToString(Coordonees[1]) + " " + Convert.ToString(Coordonees[2]) + " " + Convert.ToString(R) + " " + Convert.ToString(G) + " " + Convert.ToString(B));
         }
     }
 }
