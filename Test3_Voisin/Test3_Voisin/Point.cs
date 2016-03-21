@@ -8,66 +8,21 @@ namespace Test3_Voisin
 {
     class Point
     {
-        private Double x;
-        private Double y;
-        private Double z;
+      
         private int r;
         private int g;
         private int b;
         private List<double> Coordonees = new List<double>(); 
 
-        public Point(Double x, Double y, Double z)
+        public Point(List<double> coordonnees)
         {
-            this.X = x;
-            this.Y = y;
-            this.Z = z;
+            this.Coordonees = coordonnees;
             this.R = 1;
             this.G = 1;
             this.B = 1;
-            Coordonees1.Add(x);
-            Coordonees1.Add(y);
-            Coordonees1.Add(z);
 
         }
 
-        public double X
-        {
-            get
-            {
-                return x;
-            }
-
-            set
-            {
-                x = value;
-            }
-        }
-
-        public double Y
-        {
-            get
-            {
-                return y;
-            }
-
-            set
-            {
-                y = value;
-            }
-        }
-
-        public double Z
-        {
-            get
-            {
-                return z;
-            }
-
-            set
-            {
-                z = value;
-            }
-        }
 
         public int R
         {
