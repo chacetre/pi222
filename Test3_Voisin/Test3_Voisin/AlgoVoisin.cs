@@ -86,7 +86,7 @@ namespace Test3_Voisin
 
             for (int i = 0; i < 3; i++)
             {
-                distance += Math.Pow((p1.Coordonees1[i] - p2.Coordonees1[i]), 2.0);
+                distance += Math.Pow((p1.Coordonees[i] - p2.Coordonees[i]), 2.0);
             }
 
             distance = Math.Sqrt(distance);
