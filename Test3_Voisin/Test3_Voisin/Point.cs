@@ -14,6 +14,7 @@ namespace Test3_Voisin
         private int r;
         private int g;
         private int b;
+        private List<double> Coordonees = new List<double>(); 
 
         public Point(Double x, Double y, Double z)
         {
@@ -23,6 +24,10 @@ namespace Test3_Voisin
             this.R = 1;
             this.G = 1;
             this.B = 1;
+            Coordonees1.Add(x);
+            Coordonees1.Add(y);
+            Coordonees1.Add(z);
+
         }
 
         public double X
@@ -103,9 +108,24 @@ namespace Test3_Voisin
             }
         }
 
+        public List<double> Coordonees1
+        {
+            get
+            {
+                return Coordonees;
+            }
+
+            set
+            {
+                Coordonees = value;
+            }
+        }
+
         public override string ToString()
         {
             return (Convert.ToString(x) + " " + Convert.ToString(y) + " " + Convert.ToString(z) + " " + Convert.ToString(r) + " " + Convert.ToString(g) + " " + Convert.ToString(b));
         }
+
+        
     }
 }
