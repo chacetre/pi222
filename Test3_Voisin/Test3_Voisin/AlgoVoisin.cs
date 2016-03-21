@@ -16,8 +16,7 @@ namespace Test3_Voisin
             //int counter = 0;
             string line;
             int i = 0;
-            // test
-            //faire en sorte que ca marche par tout 
+            
             System.IO.StreamReader file = new System.IO.StreamReader(@"C:\Users\Marjorie\Desktop\PI²\object simple ex\C_002.txt");
             while ((line = file.ReadLine()) != null)
             {
@@ -75,10 +74,10 @@ namespace Test3_Voisin
                 double distance = DistanceE(p, pInit);
                 if ( count < 3 )
                 {
-                    if (distance < pas)
-                    {
-                        voisin.Add(p);
-                        Console.WriteLine("ajouter !");
+                if (distance < pas)
+                {
+                    voisin.Add(p);
+                    Console.WriteLine("ajouter !");
                         RechercherVoisin(p, listPoint , count);
                     }
                 }
