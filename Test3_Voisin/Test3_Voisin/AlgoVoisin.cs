@@ -51,32 +51,38 @@ namespace Test3_Voisin
 
         public void Trie_voisin()
         {
+            LireFichier();
+
             Random r = new Random();
             int rPoint = r.Next(1, 100); // nb entre 1 et 99
+            int count = 0;
 
             Point pInit = groupe[rPoint];
 
-            RechercherVoisin(pInit, groupe);
+            RechercherVoisin(pInit, groupe, count);
 
             // faire ca tant qu'il y a des point dans groupe 
-            // il faut don c faire un remove
+            // il faut donc faire un remove de la liste
 
         }
 
-        public void RechercherVoisin(Point pInit, List<Point> listPoint)
+        public void RechercherVoisin(Point pInit, List<Point> listPoint, int count)
         {
             double pas = 0.5;
-
+            count++;
             foreach (Point p in listPoint)
             {
                 double distance = DistanceE(p, pInit);
-                if (distance < pas)
+                if ( count < 3 )
                 {
-                    voisin.Add(p);
-                    Console.WriteLine("ajouter !");
-                    // si besoin faire recherche de voisin encore une fois 
-                    // mettre un breal ou un truc comme ca avce un count en parametre
+                    if (distance < pas)
+                    {
+                        voisin.Add(p);
+                        Console.WriteLine("ajouter !");
+                        RechercherVoisin(p, listPoint , count);
+                    }
                 }
+                
             }
 
         }
