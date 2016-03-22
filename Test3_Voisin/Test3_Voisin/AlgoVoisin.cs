@@ -10,13 +10,14 @@ namespace Test3_Voisin
     {
         private List<Point> groupe = new List<Point>();
         private List<Point> voisin = new List<Point>();
+        private List<Point> obj = new List<Point>(); // Ajout de la liste obj 
 
         public void LireFichier()
         {
             //int counter = 0;
             string line;
             int i = 0;
-            
+
             System.IO.StreamReader file = new System.IO.StreamReader(@"C:\Users\Marjorie\Desktop\PI²\object simple ex\C_002.txt");
             while ((line = file.ReadLine()) != null)
             {
@@ -32,7 +33,11 @@ namespace Test3_Voisin
                 {
                     line = line.Replace('.', ',');
                     string[] words = line.Split('\t', ' ');
-                    Point p = new Point(Convert.ToDouble(words[0]), Convert.ToDouble(words[1]), Convert.ToDouble(words[2]));
+                    List<double> coord = new List<double>();
+                    coord.Add(Convert.ToDouble(words[0]));
+                    coord.Add(Convert.ToDouble(words[1]));
+                    coord.Add(Convert.ToDouble(words[2]));
+                    Point p = new Point(coord);
                     groupe.Add(p);
                     i++;
                 }
@@ -57,8 +62,13 @@ namespace Test3_Voisin
             int count = 0;
 
             Point pInit = groupe[rPoint];
+            voisin.Add(pInit);
 
-            RechercherVoisin(pInit, groupe, count);
+            RechercherVoisin(pInit, groupe, 0);
+            CreationObjet(voisin, obj);
+            
+            EcrireFichier(voisin, "ListeVoisin"); //Ecriture des fichier dans la fonction 
+            EcrireFichier(obj, "listeObjet"); // Appel de la fonction 
 
             // faire ca tant qu'il y a des point dans groupe 
             // il faut donc faire un remove de la liste
@@ -67,23 +77,52 @@ namespace Test3_Voisin
 
         public void RechercherVoisin(Point pInit, List<Point> listPoint, int count)
         {
-            double pas = 0.5;
-            count++;
-            foreach (Point p in listPoint)
+            double pas = 0.01;
+            int countTemp = count;
+            if (count < 3)
             {
-                double distance = DistanceE(p, pInit);
-                if ( count < 3 )
+                foreach (Point p in listPoint)
                 {
-                if (distance < pas)
-                {
-                    voisin.Add(p);
-                    Console.WriteLine("ajouter !");
-                        RechercherVoisin(p, listPoint , count);
+                    double distance = DistanceE(p, pInit);
+                    if (count < 3)
+                    {
+                        if (distance < pas)
+                        {
+                                voisin.Add(p);
+                                Console.WriteLine("ajouter !");
+                                countTemp = count + 1;
+                                RechercherVoisin(p, listPoint, countTemp);
+                        }
                     }
                 }
-                
+
             }
 
+        }
+
+        public void CreationObjet(List<Point> list, List<Point> objet) //Ajout de la fonction 
+        {
+            int conteur = 0;
+            objet.Add(list[0]);
+            int taille = objet.Count();
+            foreach (Point p in list)
+            {
+                for (int i = 0; i < taille; i++)
+                {
+                    if (p.EstEgale(objet[i]) == false)
+                    {
+                        conteur = conteur + 1;
+                    }
+                }
+                if (conteur == taille)
+                {
+                    objet.Add(p);
+                    Console.WriteLine("obj ok");
+
+                    taille++;
+                }
+                conteur = 0;
+            }
         }
 
         public double DistanceE(Point p1, Point p2)
@@ -99,10 +138,11 @@ namespace Test3_Voisin
             return distance;
         }
 
-        public void EcrireFichier()
+        public void EcrireFichier(List<Point> aEcrire, String nomFichier) // Modification de la fonction Ecrire Fichier 
         {
-            System.IO.StreamWriter fichierPourEcrire = new System.IO.StreamWriter("testAlgo.txt");
-            foreach (Point g in voisin)
+            string titre = nomFichier + ".txt";
+            System.IO.StreamWriter fichierPourEcrire = new System.IO.StreamWriter(titre);
+            foreach (Point g in aEcrire)
             {
                 String s = g.ToString();
                 s.Replace(',', '.');
@@ -111,6 +151,7 @@ namespace Test3_Voisin
             }
             fichierPourEcrire.Close();
             Console.WriteLine("Bien reçu");
+            Console.WriteLine(titre); 
         }
     }
 }
