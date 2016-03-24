@@ -80,9 +80,20 @@ namespace Test3_Voisin
 
         public override string ToString()
         {
-            return (Convert.ToString(x) + " " + Convert.ToString(y) + " " + Convert.ToString(z) + " " + Convert.ToString(r) + " " + Convert.ToString(g) + " " + Convert.ToString(b));
+            return (Convert.ToString(Coordonees[0]) + " " + Convert.ToString(Coordonees[1]) + " " + Convert.ToString(Coordonees[2]) + " " + Convert.ToString(r) + " " + Convert.ToString(g) + " " + Convert.ToString(b));
         }
 
+        public bool EstEgale(Point p)  //Création de la fonction 
+        {
+            if (this.Coordonees[0] == p.Coordonees[0] && this.Coordonees[1] == p.Coordonees[1] && this.Coordonees[2] == p.Coordonees[2])
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
         
     }
 }
