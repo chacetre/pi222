@@ -57,19 +57,32 @@ namespace Test3_Voisin
         {
             LireFichier();
 
+
             Random r = new Random();
-            int rPoint = r.Next(1, 100); // nb entre 1 et 99
-            int count = 0;
+            int i = 1;
+            while (groupe != null)
+            {
+                int rPoint = r.Next(1, 100); // nb entre 1 et 99
+                                             //int count = 0;
 
-            Point pInit = groupe[rPoint];
-            voisin.Add(pInit);
+                string titreFichier = "listeVoisin" + Convert.ToString(i);
 
-            RechercherVoisin(pInit, groupe, 0);
-            CreationObjet(voisin, obj);
-            
-            EcrireFichier(voisin, "ListeVoisin"); //Ecriture des fichier dans la fonction 
-            EcrireFichier(obj, "listeObjet"); // Appel de la fonction 
+                Point pInit = groupe[rPoint];
+                pInit.R = 255;
+                pInit.G = 0;
+                pInit.B = 0;
+                voisin.Add(pInit);
+                groupe.RemoveAt(rPoint);
 
+                RechercherVoisin(pInit, groupe, 0);
+
+                EcrireFichier(voisin, titreFichier);
+                //EcrireFichier(obj, "listeObjet");
+
+                voisin.Clear();
+                i++;
+
+            }
             // faire ca tant qu'il y a des point dans groupe 
             // il faut donc faire un remove de la liste
 
@@ -78,27 +91,32 @@ namespace Test3_Voisin
         public void RechercherVoisin(Point pInit, List<Point> listPoint, int count)
         {
             double pas = 0.01;
-            int countTemp = count;
-            if (count < 3)
+            List<int> val = new List<int>();
+            for (int i = 0; i < voisin.Count(); i++)  //trouver un moyen d'enle
             {
+                pInit = voisin[i];
                 foreach (Point p in listPoint)
                 {
                     double distance = DistanceE(p, pInit);
-                    if (count < 3)
+                    if (distance < pas)
                     {
-                        if (distance < pas)
-                        {
-                                voisin.Add(p);
-                                Console.WriteLine("ajouter !");
-                                countTemp = count + 1;
-                                RechercherVoisin(p, listPoint, countTemp);
-                        }
+                        voisin.Add(p);
+                        val.Add(listPoint.IndexOf(p));
+                        Console.WriteLine("ajouter !");
                     }
                 }
-
+                Console.WriteLine("tour " + i);
+                val.Reverse();
+                foreach (int x in val)
+                {
+                    listPoint.RemoveAt(x);
+                }
+                val.Clear();
             }
 
         }
+
+        
 
         public void CreationObjet(List<Point> list, List<Point> objet) //Ajout de la fonction 
         {
