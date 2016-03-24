@@ -47,6 +47,7 @@ namespace Test3_Voisin
 
         }
 
+        // test modif
 
         public void Trie_voisin()
         {

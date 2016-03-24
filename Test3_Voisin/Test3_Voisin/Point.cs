@@ -12,11 +12,11 @@ namespace Test3_Voisin
         private int r;
         private int g;
         private int b;
-        private List<double> Coordonees = new List<double>(); 
+        private List<double> coordonees = new List<double>(); 
 
         public Point(List<double> coordonnees)
         {
-            this.Coordonees = coordonnees;
+            this.coordonees = coordonnees;
             this.R = 1;
             this.G = 1;
             this.B = 1;
@@ -63,18 +63,20 @@ namespace Test3_Voisin
             }
         }
 
-        public List<double> Coordonees1
+        public List<double> Coordonees
         {
             get
             {
-                return Coordonees;
+                return coordonees;
             }
 
             set
             {
-                Coordonees = value;
+                coordonees = value;
             }
         }
+
+       
 
         public override string ToString()
         {
