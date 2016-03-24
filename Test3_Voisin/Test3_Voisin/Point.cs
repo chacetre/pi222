@@ -12,11 +12,26 @@ namespace Test3_Voisin
         private int r;
         private int g;
         private int b;
-        private List<double> coordonees = new List<double>(); 
+        private List<double> coordonees = new List<double>();
+        Cube cluster;
 
         public Point(List<double> coordonnees)
         {
             this.coordonees = coordonnees;
+            this.R = 1;
+            this.G = 1;
+            this.B = 1;
+
+        }
+
+        public Point(double x , double y , double z)
+        {
+            List<double> coordTemp = new List<double>();
+            coordTemp.Add(x);
+            coordTemp.Add(y);
+            coordTemp.Add(z);
+
+            this.coordonees = coordTemp;
             this.R = 1;
             this.G = 1;
             this.B = 1;
@@ -76,7 +91,18 @@ namespace Test3_Voisin
             }
         }
 
-       
+        internal Cube Cluster
+        {
+            get
+            {
+                return cluster;
+            }
+
+            set
+            {
+                cluster = value;
+            }
+        }
 
         public override string ToString()
         {
