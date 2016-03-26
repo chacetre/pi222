@@ -11,11 +11,13 @@ namespace Test3_Voisin
         static void Main(string[] args)
         {
             AlgoVoisin Algo = new AlgoVoisin();
-            Algo.LireFichier();
-            Algo.RechercheMaxMin();
-            //Algo.Trie_voisin();
-            
+            //Algo.LireFichier();
+           // Algo.RechercheMaxMin();
+            Algo.TrieVoisinCube();
 
+            //Algo.Trie_voisin();
+
+           
            
 
             Console.ReadKey();
