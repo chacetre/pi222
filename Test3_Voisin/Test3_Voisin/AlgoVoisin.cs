@@ -15,7 +15,6 @@ namespace Test3_Voisin
 
         private List<Point> groupe = new List<Point>();
         private List<Point> voisin = new List<Point>();
-        private List<Point> obj = new List<Point>(); // Ajout de la liste obj 
         List<Cube> cubeGeant = new List<Cube>(); // liste des cubes du cubeGeant
 
         // Pour definir le cube Geant 
@@ -30,7 +29,6 @@ namespace Test3_Voisin
 
         public void LireFichier()
         {
-            //int counter = 0;
             string line;
             int i = 0;
 
@@ -64,7 +62,7 @@ namespace Test3_Voisin
 
             System.Console.WriteLine("Fichier lu");
 
-            //System.Console.ReadKey();
+            System.Console.ReadKey();
 
         }
 
@@ -121,7 +119,7 @@ namespace Test3_Voisin
 
                         Cube cubeTemp = new Cube(miniTemp, maxTemp, coordoCube);
                         cubeGeant.Add(cubeTemp);
-                        coordoCube.Clear();
+                        
                         
                         nbCube++;
                         coordK++;
@@ -138,6 +136,7 @@ namespace Test3_Voisin
         {
             foreach (Point p in groupe)
             {
+                
                 foreach (Cube c in cubeGeant)
                 {
                     if (c.Min.Coordonees[0] < p.Coordonees[0] && p.Coordonees[0] < c.Max.Coordonees[0])
@@ -146,7 +145,7 @@ namespace Test3_Voisin
                         {
                             if (c.Min.Coordonees[2] < p.Coordonees[2] && p.Coordonees[2] < c.Max.Coordonees[2])
                             {
-                                p.Cluster = new Cube(c.Min, c.Max, c.Coordonee); // l'égalité n'est pas redéfinie
+                                p.CoordCluster = c.Coordonee;
                                 c.Contenue.Add(p);
                             }
                         }
@@ -158,8 +157,6 @@ namespace Test3_Voisin
 
         public void TrieVoisinCube() // recherche des voisins avec la methode du cube
         {
-            
-
             LireFichier(); // on enregistre les donnee
             // --- Creation des cubes ---
             RechercheMaxMin(); //
@@ -167,24 +164,24 @@ namespace Test3_Voisin
             //--- Classement des points dans les cubes
             PlacerPoint();
 
-            int i =1;
+            int i=1;
             while (groupe != null)
             {
                 Random r = new Random();
-                int rPoint = r.Next(1, 10000); // index du point
+                int rPoint = r.Next(1, 100); // index du point
                 Point pInit = groupe[rPoint]; // point initial
                 pInit.R = 255;
                 pInit.G = 0;
                 pInit.B = 0;
-                List<Cube> cubevoisin = ChercherCubeVoisin(pInit);
+                List<Cube> cubevoisin = ChercherCubeVoisin(pInit); //liste des cube voisin au cluster 
 
-                foreach (Cube c in cubevoisin)
+                /*foreach (Cube c in cubevoisin) //pour chaque cube de la liste de cube voisin 
                 {
-                    foreach (Point p in c.Contenue)
+                    foreach (Point p in c.Contenue) //pour chaque point p dans le cube 
                     {
-                        Console.WriteLine(p.ToString());
+                        Console.WriteLine(p.ToString()); //on affiche les coordonnées du point 
                     }
-                }
+                }*/
                 string titreFichier = "listeVoisin" + Convert.ToString(i);
 
                 
@@ -192,15 +189,12 @@ namespace Test3_Voisin
                 groupe.RemoveAt(rPoint);
 
                 RechercherVoisin2(pInit, cubevoisin, 0);
-
+                
                 EcrireFichier(voisin, titreFichier);
-                //EcrireFichier(obj, "listeObjet");
 
                 voisin.Clear();
                 i++;
-
             }
-
         }
 
         public void Trie_voisin()
@@ -227,7 +221,6 @@ namespace Test3_Voisin
                 RechercherVoisin(pInit, groupe, 0);
 
                 EcrireFichier(voisin, titreFichier);
-                //EcrireFichier(obj, "listeObjet");
 
                 voisin.Clear();
                 i++;
@@ -270,18 +263,27 @@ namespace Test3_Voisin
         public void RechercherVoisin2(Point pInit, List<Cube> listCubeVoisin, int count)
         {
             double pas = 0.01;
+
             List<int> val = new List<int>();
+            List<int> valGr = new List<int>();
+            int ind = 0;
             for (int i = 0; i < voisin.Count(); i++)  //trouver un moyen d'enlever
             {
                 pInit = voisin[i];
                 foreach (Cube c in listCubeVoisin)
                 {
+                    if(c.Contenue.Contains(pInit) == true)
+                    {
+                        ind = c.Contenue.IndexOf(pInit);
+                        c.Contenue.RemoveAt(ind);
+                    }
                     foreach (Point p in c.Contenue)
                     {
                         double distance = DistanceE(p, pInit);
                         if (distance < pas)
                         {
                             voisin.Add(p);
+                            valGr.Add(groupe.IndexOf(p));
                             val.Add(c.Contenue.IndexOf(p));
                             Console.WriteLine("ajouter !");
                         }
@@ -289,39 +291,20 @@ namespace Test3_Voisin
 
                     Console.WriteLine("tour " + i);
                     val.Reverse();
+                    valGr.Reverse();
                     foreach (int x in val)
                     {
                         c.Contenue.RemoveAt(x);
                     }
-                    val.Clear();
-                }
-            }
-
-        }
-
-        public void CreationObjet(List<Point> list, List<Point> objet) //Ajout de la fonction 
-        {
-            int conteur = 0;
-            objet.Add(list[0]);
-            int taille = objet.Count();
-            foreach (Point p in list)
-            {
-                for (int i = 0; i < taille; i++)
-                {
-                    if (p.EstEgale(objet[i]) == false)
+                    foreach (int g in valGr)
                     {
-                        conteur = conteur + 1;
+                        groupe.RemoveAt(g);
                     }
+                    val.Clear();
+                    valGr.Clear();
                 }
-                if (conteur == taille)
-                {
-                    objet.Add(p);
-                    Console.WriteLine("obj ok");
-
-                    taille++;
-                }
-                conteur = 0;
             }
+            Console.WriteLine("il y a {0} voisin", voisin.Count());
         }
 
         public double DistanceE(Point p1, Point p2)
@@ -332,7 +315,6 @@ namespace Test3_Voisin
             {
                 distance += Math.Pow((p1.Coordonees[i] - p2.Coordonees[i]), 2.0);
             }
-
             distance = Math.Sqrt(distance);
             return distance;
         }
@@ -356,25 +338,21 @@ namespace Test3_Voisin
         public List<Cube> ChercherCubeVoisin(Point p)
         {
             List<Cube> listTemp = new List<Cube>();
-            Cube init = p.Cluster;
-            Console.WriteLine(init.Coordonee[0]);
-            /*int x = init.Coordonee[0];
+            List<int> init = p.CoordCluster;
             foreach (Cube c in cubeGeant)
             {
-                if (c.Coordonee[0] ==x || c.Coordonee[0] == x-1 || c.Coordonee[0] == x+1)
+                if (c.Coordonee[0] == init[0] || c.Coordonee[0] == init[0] -1 || c.Coordonee[0] == init[0]+1)
                 {
-                    if (c.Coordonee[1] == init.Coordonee[1] || c.Coordonee[1] == init.Coordonee[1] - 1 || c.Coordonee[1] == init.Coordonee[1] + 1)
+                    if (c.Coordonee[1] == init[1] || c.Coordonee[1] == init[1] - 1 || c.Coordonee[1] == init[1] + 1)
                     {
-                        if (c.Coordonee[2] == init.Coordonee[2] || c.Coordonee[2] == init.Coordonee[2] - 1 || c.Coordonee[2] == init.Coordonee[2] + 1)
+                        if (c.Coordonee[2] == init[2] || c.Coordonee[2] == init[2] - 1 || c.Coordonee[2] == init[2] + 1)
                         {
                             listTemp.Add(c);
                         }
                     }
                 }
-            }*/
-
+            }
             return listTemp;
-
         }
     }
 }

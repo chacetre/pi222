@@ -14,6 +14,7 @@ namespace Test3_Voisin
         private int b;
         private List<double> coordonees = new List<double>();
         Cube cluster;
+        List<int> coordCluster = new List<int>();
 
         public Point(List<double> coordonnees)
         {
@@ -21,6 +22,7 @@ namespace Test3_Voisin
             this.R = 1;
             this.G = 1;
             this.B = 1;
+            this.CoordCluster.Add(0); this.CoordCluster.Add(0); this.CoordCluster.Add(0);
 
         }
 
@@ -91,7 +93,7 @@ namespace Test3_Voisin
             }
         }
 
-        internal Cube Cluster
+        public Cube Cluster
         {
             get
             {
@@ -101,6 +103,19 @@ namespace Test3_Voisin
             set
             {
                 cluster = value;
+            }
+        }
+
+        public List<int> CoordCluster
+        {
+            get
+            {
+                return coordCluster;
+            }
+
+            set
+            {
+                coordCluster = value;
             }
         }
 
