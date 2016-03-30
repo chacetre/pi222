@@ -11,7 +11,7 @@ namespace Test3_Voisin
         Point min;
         Point max;
         List<int> coordonee;
-        List<Point> contenue;
+        List<Point> contenue = new List<Point>();
 
         public Cube(Point min, Point max, List<int> coordonee)
         {
@@ -70,6 +70,15 @@ namespace Test3_Voisin
             {
                 contenue = value;
             }
+        }
+
+        public void Devient(Cube c)
+        {
+            this.min = c.Min;
+            this.max = c.Max;
+            this.coordonee[0] = c.Coordonee[0];
+            this.coordonee[1] = c.Coordonee[1];
+            this.coordonee[2] = c.Coordonee[2];
         }
     }
 }

@@ -8,7 +8,7 @@ namespace Test3_Voisin
 {
     class AlgoVoisin
     {
-        
+
         /* Coucou, alors j'ai créer le cube et essayer de faire une recherche de voisin avec. Mais j'ai pas pu la teste
         je pense qu'il y a quelque probleme et j'ai pas tout compris comment tu avais fait ta recherche de voisin mais
         j'ai quand meme copier tu as fait pour pas tout casse j'ai creer une nouvelle fonction */
@@ -64,7 +64,7 @@ namespace Test3_Voisin
 
             System.Console.WriteLine("Fichier lu");
 
-            System.Console.ReadLine();
+            //System.Console.ReadKey();
 
         }
 
@@ -74,13 +74,13 @@ namespace Test3_Voisin
             int rPoint = r.Next(1, 100);
             Point pInit = groupe[rPoint];
 
-            double miniX = pInit.Coordonees[0];
-            double miniY = pInit.Coordonees[1];
-            double miniZ = pInit.Coordonees[2];
+            miniX = pInit.Coordonees[0];
+            miniY = pInit.Coordonees[1];
+            miniZ = pInit.Coordonees[2];
 
-            double maxX = pInit.Coordonees[0];
-            double maxY = pInit.Coordonees[1];
-            double maxZ = pInit.Coordonees[2];
+            maxX = pInit.Coordonees[0];
+            maxY = pInit.Coordonees[1];
+            maxZ = pInit.Coordonees[2];
 
             foreach (Point p in groupe)
             {
@@ -88,26 +88,28 @@ namespace Test3_Voisin
                 miniY = Math.Min(miniY, p.Coordonees[1]);
                 miniZ = Math.Min(miniZ, p.Coordonees[2]);
 
-                maxX = Math.Min(maxX, p.Coordonees[0]);
-                maxY = Math.Min(maxY, p.Coordonees[1]);
-                maxZ = Math.Min(maxZ, p.Coordonees[2]);
+                maxX = Math.Max(maxX, p.Coordonees[0]);
+                maxY = Math.Max(maxY, p.Coordonees[1]);
+                maxZ = Math.Max(maxZ, p.Coordonees[2]);
             }
-
-            Console.ReadKey();
+            Console.WriteLine(miniX + "; " + miniY + "; " + miniZ);
+            Console.WriteLine(maxX + "; " + maxY + "; " + maxZ);
+            //Console.ReadKey();
         }
 
         public void GenererCube()
         {
-            double p = 0.1;
+            double p = 5;
             int coordI = 0;
             int coordJ = 0;
             int coordK = 0;
+            int nbCube = 0;
 
             for (double i = miniX; i < maxX; i += p)
             {
-                for (double j = miniY; i < maxY; j += p)
+                for (double j = miniY; j < maxY; j += p)
                 {
-                    for (double k = miniZ; i < maxZ; k += p)
+                    for (double k = miniZ; k < maxZ; k += p)
                     {
                         Point miniTemp = new Point(i, j, k);
                         Point maxTemp = new Point(i + p, j + p, k + p);
@@ -119,13 +121,16 @@ namespace Test3_Voisin
 
                         Cube cubeTemp = new Cube(miniTemp, maxTemp, coordoCube);
                         cubeGeant.Add(cubeTemp);
+                        coordoCube.Clear();
 
+                        nbCube++;
                         coordK++;
                     }
                     coordJ++;
                 }
                 coordI++;
             }
+            Console.WriteLine("il y a {0} cubes", nbCube);
 
         }
 
@@ -141,13 +146,14 @@ namespace Test3_Voisin
                         {
                             if (c.Min.Coordonees[2] < p.Coordonees[2] && p.Coordonees[2] < c.Max.Coordonees[2])
                             {
-                                p.Cluster = c;
+                                p.Cluster = new Cube(c.Min, c.Max, c.Coordonee); // l'égalité n'est pas redéfinie
                                 c.Contenue.Add(p);
                             }
                         }
                     }
                 }
             }
+            Console.WriteLine("dans cube !");
         }
 
         public void TrieVoisinCube() // recherche des voisins avec la methode du cube
@@ -161,6 +167,7 @@ namespace Test3_Voisin
             //--- Classement des points dans les cubes
             PlacerPoint();
 
+            int i =1;
             while (groupe != null)
             {
                 Random r = new Random();
@@ -170,8 +177,14 @@ namespace Test3_Voisin
                 pInit.G = 0;
                 pInit.B = 0;
                 List<Cube> cubevoisin = ChercherCubeVoisin(pInit);
-                int i = 1;           
 
+                foreach (Cube c in cubevoisin)
+                {
+                    foreach (Point p in c.Contenue)
+                    {
+                        Console.WriteLine(p.ToString());
+                    }
+                }
                 string titreFichier = "listeVoisin" + Convert.ToString(i);
 
                 
@@ -344,10 +357,11 @@ namespace Test3_Voisin
         {
             List<Cube> listTemp = new List<Cube>();
             Cube init = p.Cluster;
-
+            Console.WriteLine(init.Coordonee[0]);
+            /*int x = init.Coordonee[0];
             foreach (Cube c in cubeGeant)
             {
-                if (c.Coordonee[0] == init.Coordonee[0] || c.Coordonee[0] == init.Coordonee[0] - 1 || c.Coordonee[0] == init.Coordonee[0] + 1)
+                if (c.Coordonee[0] ==x || c.Coordonee[0] == x-1 || c.Coordonee[0] == x+1)
                 {
                     if (c.Coordonee[1] == init.Coordonee[1] || c.Coordonee[1] == init.Coordonee[1] - 1 || c.Coordonee[1] == init.Coordonee[1] + 1)
                     {
@@ -357,7 +371,7 @@ namespace Test3_Voisin
                         }
                     }
                 }
-            }
+            }*/
 
             return listTemp;
 
