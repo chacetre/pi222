@@ -30,7 +30,7 @@ namespace Test3_Voisin
             string line;
             int i = 0;
 
-            System.IO.StreamReader file = new System.IO.StreamReader(@"C:\Users\Marjorie\Desktop\PI²\object simple ex\C_002.txt");
+            System.IO.StreamReader file = new System.IO.StreamReader("./../../../C_002.txt");
             while ((line = file.ReadLine()) != null)
             {
                 if (i <= 10)
@@ -108,7 +108,7 @@ namespace Test3_Voisin
                     for (double k = miniZ; k < maxZ; k += p)
                     {
                         Point miniTemp = new Point(i, j, k);
-                        Point maxTemp = new Point(i + p, j + p, k + p);
+                        Point maxTemp = new Point(i + (coordK * p) + p, j + (coordK * p) + p, k + (coordK * p) + p);
 
                         List<int> coordoCube = new List<int>();
                         coordoCube.Add(coordI);
@@ -117,13 +117,15 @@ namespace Test3_Voisin
 
                         Cube cubeTemp = new Cube(miniTemp, maxTemp, coordoCube);
                         cubeGeant.Add(cubeTemp);
-                        coordoCube.Clear();
+                        //coordoCube.Clear();
 
                         nbCube++;
                         coordK++;
                     }
+                    coordK = 0;
                     coordJ++;
                 }
+                coordJ = 0;
                 coordI++;
             }
             Console.WriteLine("il y a {0} cubes", nbCube);
@@ -132,6 +134,7 @@ namespace Test3_Voisin
 
         public void PlacerPoint()
         {
+            int count = 0;
             foreach (Point p in groupe)
             {
                 foreach (Cube c in cubeGeant)
@@ -144,19 +147,20 @@ namespace Test3_Voisin
                             {
                                 p.Cluster = new Cube(c.Min, c.Max, c.Coordonee); // l'égalité n'est pas redéfinie
                                 c.Contenue.Add(p);
+                                count++;
+                                Console.WriteLine(count);
+                                Console.WriteLine("dans cube !");
                                 break;
                             }
                         }
                     }
                 }
             }
-            Console.WriteLine("dans cube !");
+
         }
 
         public void TrieVoisinCube() // recherche des voisins avec la methode du cube
         {
-            
-
             LireFichier(); // on enregistre les donnees
             // --- Creation des cubes ---
             RechercheMaxMin(); //
@@ -164,7 +168,7 @@ namespace Test3_Voisin
             //--- Classement des points dans les cubes
             PlacerPoint();
 
-            int i =1;
+            int i = 1;
             while (groupe != null)
             {
                 Random r = new Random();
@@ -176,89 +180,16 @@ namespace Test3_Voisin
 
                 List<Cube> cubevoisin = ChercherCubeVoisin(pInit);
 
-                foreach (Cube c in cubevoisin)
-                {
-                    foreach (Point p in c.Contenue)
-                    {
-                        Console.WriteLine(p.ToString());
-                    }
-                }
-
-                string titreFichier = "listeVoisin" + Convert.ToString(i);
-                                
                 voisin.Add(pInit);
                 groupe.RemoveAt(rPoint);
 
                 RechercherVoisin2(pInit, cubevoisin, 0);
 
-                EcrireFichier(voisin, titreFichier);
-                //EcrireFichier(obj, "listeObjet");
-                voisin.Clear();
-                i++;
-
-            }
-
-        }
-
-        public void Trie_voisin()
-        {
-            LireFichier();
-
-
-            Random r = new Random();
-            int i = 1;
-            while (groupe != null)
-            {
-                int rPoint = r.Next(1, 100); // nb entre 1 et 99
-                                             //int count = 0;
-
                 string titreFichier = "listeVoisin" + Convert.ToString(i);
-
-                Point pInit = groupe[rPoint];
-                pInit.R = 255;
-                pInit.G = 0;
-                pInit.B = 0;
-                voisin.Add(pInit);
-                groupe.RemoveAt(rPoint);
-
-                RechercherVoisin(pInit, groupe, 0);
-
                 EcrireFichier(voisin, titreFichier);
                 //EcrireFichier(obj, "listeObjet");
-
                 voisin.Clear();
                 i++;
-
-            }
-            // faire ca tant qu'il y a des point dans groupe 
-            // il faut donc faire un remove de la liste
-
-        }
-
-        public void RechercherVoisin(Point pInit, List<Point> listPoint, int count)
-        {
-            double pas = 0.01;
-            List<int> val = new List<int>();
-            for (int i = 0; i < voisin.Count(); i++)  //trouver un moyen d'enlever
-            {
-                pInit = voisin[i];
-                foreach (Point p in listPoint)
-                {
-                    double distance = DistanceE(p, pInit);
-                    if (distance < pas)
-                    {
-                        voisin.Add(p);
-                        val.Add(listPoint.IndexOf(p));
-                        Console.WriteLine("ajouter !");
-                    }
-                }
-                Console.WriteLine("tour " + i);
-                val.Reverse();
-                foreach (int x in val)
-                {
-                    listPoint.RemoveAt(x);
-                }
-                val.Clear();
             }
 
         }
@@ -267,7 +198,8 @@ namespace Test3_Voisin
         {
             double pas = 0.01;
             List<int> val = new List<int>();
-            for (int i = 0; i < voisin.Count(); i++)  //trouver un moyen d'enlever
+
+            for (int i = 0; i < voisin.Count(); i++)
             {
                 pInit = voisin[i];
                 foreach (Cube c in listCubeVoisin)
@@ -283,7 +215,7 @@ namespace Test3_Voisin
                         }
                     }
 
-                    Console.WriteLine("tour " + i);
+                    Console.WriteLine("tour "+ i);
                     val.Reverse();
                     foreach (int x in val)
                     {
@@ -291,32 +223,6 @@ namespace Test3_Voisin
                     }
                     val.Clear();
                 }
-            }
-
-        }
-
-        public void CreationObjet(List<Point> list, List<Point> objet) //Ajout de la fonction 
-        {
-            int conteur = 0;
-            objet.Add(list[0]);
-            int taille = objet.Count();
-            foreach (Point p in list)
-            {
-                for (int i = 0; i < taille; i++)
-                {
-                    if (p.EstEgale(objet[i]) == false)
-                    {
-                        conteur = conteur + 1;
-                    }
-                }
-                if (conteur == taille)
-                {
-                    objet.Add(p);
-                    Console.WriteLine("obj ok");
-
-                    taille++;
-                }
-                conteur = 0;
             }
         }
 
@@ -354,10 +260,10 @@ namespace Test3_Voisin
             List<Cube> listTemp = new List<Cube>();
             Cube init = p.Cluster;
             Console.WriteLine(init.Coordonee[0]);
-            /*int x = init.Coordonee[0];
+            int x = init.Coordonee[0];
             foreach (Cube c in cubeGeant)
             {
-                if (c.Coordonee[0] ==x || c.Coordonee[0] == x-1 || c.Coordonee[0] == x+1)
+                if (c.Coordonee[0] == x || c.Coordonee[0] == x - 1 || c.Coordonee[0] == x + 1)
                 {
                     if (c.Coordonee[1] == init.Coordonee[1] || c.Coordonee[1] == init.Coordonee[1] - 1 || c.Coordonee[1] == init.Coordonee[1] + 1)
                     {
@@ -367,7 +273,7 @@ namespace Test3_Voisin
                         }
                     }
                 }
-            }*/
+            }
 
             return listTemp;
 
