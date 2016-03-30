@@ -9,10 +9,6 @@ namespace Test3_Voisin
     class AlgoVoisin
     {
 
-        /* Coucou, alors j'ai créer le cube et essayer de faire une recherche de voisin avec. Mais j'ai pas pu la teste
-        je pense qu'il y a quelque probleme et j'ai pas tout compris comment tu avais fait ta recherche de voisin mais
-        j'ai quand meme copier tu as fait pour pas tout casse j'ai creer une nouvelle fonction */
-
         private List<Point> groupe = new List<Point>();
         private List<Point> voisin = new List<Point>();
         private List<Point> obj = new List<Point>(); // Ajout de la liste obj 
@@ -148,6 +144,7 @@ namespace Test3_Voisin
                             {
                                 p.Cluster = new Cube(c.Min, c.Max, c.Coordonee); // l'égalité n'est pas redéfinie
                                 c.Contenue.Add(p);
+                                break;
                             }
                         }
                     }
@@ -160,7 +157,7 @@ namespace Test3_Voisin
         {
             
 
-            LireFichier(); // on enregistre les donnee
+            LireFichier(); // on enregistre les donnees
             // --- Creation des cubes ---
             RechercheMaxMin(); //
             GenererCube();
@@ -176,6 +173,7 @@ namespace Test3_Voisin
                 pInit.R = 255;
                 pInit.G = 0;
                 pInit.B = 0;
+
                 List<Cube> cubevoisin = ChercherCubeVoisin(pInit);
 
                 foreach (Cube c in cubevoisin)
@@ -185,9 +183,9 @@ namespace Test3_Voisin
                         Console.WriteLine(p.ToString());
                     }
                 }
-                string titreFichier = "listeVoisin" + Convert.ToString(i);
 
-                
+                string titreFichier = "listeVoisin" + Convert.ToString(i);
+                                
                 voisin.Add(pInit);
                 groupe.RemoveAt(rPoint);
 
@@ -195,7 +193,6 @@ namespace Test3_Voisin
 
                 EcrireFichier(voisin, titreFichier);
                 //EcrireFichier(obj, "listeObjet");
-
                 voisin.Clear();
                 i++;
 
@@ -237,7 +234,6 @@ namespace Test3_Voisin
             // il faut donc faire un remove de la liste
 
         }
-
 
         public void RechercherVoisin(Point pInit, List<Point> listPoint, int count)
         {
