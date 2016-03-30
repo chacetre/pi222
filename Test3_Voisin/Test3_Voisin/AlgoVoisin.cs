@@ -8,7 +8,7 @@ namespace Test3_Voisin
 {
     class AlgoVoisin
     {
-
+        
         /* Coucou, alors j'ai créer le cube et essayer de faire une recherche de voisin avec. Mais j'ai pas pu la teste
         je pense qu'il y a quelque probleme et j'ai pas tout compris comment tu avais fait ta recherche de voisin mais
         j'ai quand meme copier tu as fait pour pas tout casse j'ai creer une nouvelle fonction */
