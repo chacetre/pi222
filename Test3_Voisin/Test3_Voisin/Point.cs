@@ -13,7 +13,7 @@ namespace Test3_Voisin
         private int g;
         private int b;
         private List<double> coordonees = new List<double>();
-        Cube cluster;
+        List<int> coordCluster = new List<int>();
 
         public Point(List<double> coordonnees)
         {
@@ -21,6 +21,7 @@ namespace Test3_Voisin
             this.R = 1;
             this.G = 1;
             this.B = 1;
+            this.CoordCluster.Add(0); this.CoordCluster.Add(0); this.CoordCluster.Add(0);
 
         }
 
@@ -91,16 +92,16 @@ namespace Test3_Voisin
             }
         }
 
-        internal Cube Cluster
+        public List<int> CoordCluster
         {
             get
             {
-                return cluster;
+                return coordCluster;
             }
 
             set
             {
-                cluster = value;
+                coordCluster = value;
             }
         }
 
@@ -108,18 +109,6 @@ namespace Test3_Voisin
         {
             return (Convert.ToString(Coordonees[0]) + " " + Convert.ToString(Coordonees[1]) + " " + Convert.ToString(Coordonees[2]) + " " + Convert.ToString(r) + " " + Convert.ToString(g) + " " + Convert.ToString(b));
         }
-
-        public bool EstEgale(Point p)  //Création de la fonction 
-        {
-            if (this.Coordonees[0] == p.Coordonees[0] && this.Coordonees[1] == p.Coordonees[1] && this.Coordonees[2] == p.Coordonees[2])
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        
+       
     }
 }

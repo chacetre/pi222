@@ -10,7 +10,7 @@ namespace Test3_Voisin
     {
         Point min;
         Point max;
-        List<int> coordonee;
+        List<int> coordonee = new List<int>();
         List<Point> contenue = new List<Point>();
 
         public Cube(Point min, Point max, List<int> coordonee)

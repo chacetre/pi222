@@ -11,7 +11,6 @@ namespace Test3_Voisin
 
         private List<Point> groupe = new List<Point>();
         private List<Point> voisin = new List<Point>();
-        private List<Point> obj = new List<Point>(); // Ajout de la liste obj 
         List<Cube> cubeGeant = new List<Cube>(); // liste des cubes du cubeGeant
 
         // Pour definir le cube Geant 
@@ -26,11 +25,10 @@ namespace Test3_Voisin
 
         public void LireFichier()
         {
-            //int counter = 0;
             string line;
             int i = 0;
 
-            System.IO.StreamReader file = new System.IO.StreamReader("./../../../C_002.txt");
+            System.IO.StreamReader file = new System.IO.StreamReader("./../../../C_061.txt");
             while ((line = file.ReadLine()) != null)
             {
                 if (i <= 10)
@@ -60,7 +58,7 @@ namespace Test3_Voisin
 
             System.Console.WriteLine("Fichier lu");
 
-            //System.Console.ReadKey();
+            System.Console.ReadKey();
 
         }
 
@@ -117,8 +115,7 @@ namespace Test3_Voisin
 
                         Cube cubeTemp = new Cube(miniTemp, maxTemp, coordoCube);
                         cubeGeant.Add(cubeTemp);
-                        //coordoCube.Clear();
-
+                        
                         nbCube++;
                         coordK++;
                     }
@@ -129,7 +126,6 @@ namespace Test3_Voisin
                 coordI++;
             }
             Console.WriteLine("il y a {0} cubes", nbCube);
-
         }
 
         public void PlacerPoint()
@@ -137,6 +133,7 @@ namespace Test3_Voisin
             int count = 0;
             foreach (Point p in groupe)
             {
+                
                 foreach (Cube c in cubeGeant)
                 {
                     if (c.Min.Coordonees[0] < p.Coordonees[0] && p.Coordonees[0] < c.Max.Coordonees[0])
@@ -145,7 +142,7 @@ namespace Test3_Voisin
                         {
                             if (c.Min.Coordonees[2] < p.Coordonees[2] && p.Coordonees[2] < c.Max.Coordonees[2])
                             {
-                                p.Cluster = new Cube(c.Min, c.Max, c.Coordonee); // l'égalité n'est pas redéfinie
+                                p.CoordCluster = c.Coordonee;
                                 c.Contenue.Add(p);
                                 count++;
                                 Console.WriteLine(count);
@@ -172,8 +169,8 @@ namespace Test3_Voisin
             while (groupe != null)
             {
                 Random r = new Random();
-                int rPoint = r.Next(1, 10000); // index du point
-                Point pInit = groupe[rPoint]; // point initial
+                int rPoint = r.Next(1, groupe.Count); // index du point
+                Point pInit = groupe[0]; // point initial
                 pInit.R = 255;
                 pInit.G = 0;
                 pInit.B = 0;
@@ -181,7 +178,7 @@ namespace Test3_Voisin
                 List<Cube> cubevoisin = ChercherCubeVoisin(pInit);
 
                 voisin.Add(pInit);
-                groupe.RemoveAt(rPoint);
+                groupe.RemoveAt(0);
 
                 RechercherVoisin2(pInit, cubevoisin, 0);
 
@@ -197,33 +194,48 @@ namespace Test3_Voisin
         public void RechercherVoisin2(Point pInit, List<Cube> listCubeVoisin, int count)
         {
             double pas = 0.01;
-            List<int> val = new List<int>();
 
+            List<int> val = new List<int>();
+            List<int> valGr = new List<int>();
+            int ind = 0;
             for (int i = 0; i < voisin.Count(); i++)
             {
                 pInit = voisin[i];
                 foreach (Cube c in listCubeVoisin)
                 {
+                    if(c.Contenue.Contains(pInit) == true)
+                    {
+                        ind = c.Contenue.IndexOf(pInit);
+                        c.Contenue.RemoveAt(ind);
+                    }
                     foreach (Point p in c.Contenue)
                     {
                         double distance = DistanceE(p, pInit);
                         if (distance < pas)
                         {
                             voisin.Add(p);
+                            valGr.Add(groupe.IndexOf(p));
                             val.Add(c.Contenue.IndexOf(p));
-                            Console.WriteLine("ajouter !");
+                           Console.Write(".");
                         }
                     }
 
-                    Console.WriteLine("tour "+ i);
+                    //Console.WriteLine("tour "+ i);
                     val.Reverse();
+                    valGr.Reverse();
                     foreach (int x in val)
                     {
                         c.Contenue.RemoveAt(x);
                     }
+                    foreach (int g in valGr)
+                    {
+                        groupe.RemoveAt(g);
+                }
                     val.Clear();
+                    valGr.Clear();
                 }
             }
+            Console.WriteLine("il y a {0} voisin", voisin.Count());
         }
 
         public double DistanceE(Point p1, Point p2)
@@ -234,7 +246,6 @@ namespace Test3_Voisin
             {
                 distance += Math.Pow((p1.Coordonees[i] - p2.Coordonees[i]), 2.0);
             }
-
             distance = Math.Sqrt(distance);
             return distance;
         }
@@ -242,7 +253,8 @@ namespace Test3_Voisin
         public void EcrireFichier(List<Point> aEcrire, String nomFichier) // Modification de la fonction Ecrire Fichier 
         {
             string titre = nomFichier + ".txt";
-            System.IO.StreamWriter fichierPourEcrire = new System.IO.StreamWriter(titre);
+            System.IO.StreamWriter fichierPourEcrire = new System.IO.StreamWriter("./../../../FichierPoint/"+titre);
+
             foreach (Point g in aEcrire)
             {
                 String s = g.ToString();
@@ -250,6 +262,7 @@ namespace Test3_Voisin
                 fichierPourEcrire.WriteLine(s);
 
             }
+
             fichierPourEcrire.Close();
             Console.WriteLine("Bien reçu");
             Console.WriteLine(titre);
@@ -258,25 +271,21 @@ namespace Test3_Voisin
         public List<Cube> ChercherCubeVoisin(Point p)
         {
             List<Cube> listTemp = new List<Cube>();
-            Cube init = p.Cluster;
-            Console.WriteLine(init.Coordonee[0]);
-            int x = init.Coordonee[0];
+            List<int> init = p.CoordCluster;
             foreach (Cube c in cubeGeant)
             {
-                if (c.Coordonee[0] == x || c.Coordonee[0] == x - 1 || c.Coordonee[0] == x + 1)
+                if (c.Coordonee[0] == init[0] || c.Coordonee[0] == init[0] -1 || c.Coordonee[0] == init[0]+1)
                 {
-                    if (c.Coordonee[1] == init.Coordonee[1] || c.Coordonee[1] == init.Coordonee[1] - 1 || c.Coordonee[1] == init.Coordonee[1] + 1)
+                    if (c.Coordonee[1] == init[1] || c.Coordonee[1] == init[1] - 1 || c.Coordonee[1] == init[1] + 1)
                     {
-                        if (c.Coordonee[2] == init.Coordonee[2] || c.Coordonee[2] == init.Coordonee[2] - 1 || c.Coordonee[2] == init.Coordonee[2] + 1)
+                        if (c.Coordonee[2] == init[2] || c.Coordonee[2] == init[2] - 1 || c.Coordonee[2] == init[2] + 1)
                         {
                             listTemp.Add(c);
                         }
                     }
                 }
             }
-
             return listTemp;
-
         }
     }
 }
